@@ -23,7 +23,8 @@ import java.io.StringReader;
     return sf.newSymbol("EOF", ParserSym.EOF);
 %eofval}
 
-Var = [a-z0-9]+
+Num = 0 | [1-9][0-9]*
+Var = [a-zA-Z$_][a-zA-Z0-9$_]*
 
 %%
 "&"         { return sf.newSymbol("&"   , ParserSym.AND);               }
@@ -45,6 +46,7 @@ Var = [a-z0-9]+
 "("         { return sf.newSymbol("("   , ParserSym.LPAREN);            }
 ")"         { return sf.newSymbol(")"   , ParserSym.RPAREN);            }
 
-{Var}       { return sf.newSymbol("Var" , ParserSym.VAR);               }
+{Var}       { return sf.newSymbol("VAR" , ParserSym.VAR, yytext());               }
+{Num}       { return sf.newSymbol("NUM" , ParserSym.NUM, new Integer(Integer.parseInt(yytext())));               }
 
 .           { /* ignore */ }
