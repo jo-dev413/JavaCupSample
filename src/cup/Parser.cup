@@ -1,0 +1,44 @@
+/* Adapted from: http://www2.cs.tum.edu/projects/cup/examples.php */
+
+package dev.euphony.java.example;
+
+import java_cup.runtime.*;
+
+class Parser;
+
+terminal
+AND,
+OR,
+IMP,
+NOT,
+GREATER_THAN,
+GREATER_THAN_EQ,
+LESS_THAN,
+LESS_THAN_EQ,
+EQ,
+PLUS,
+MINUS,
+TIMES,
+UMINUS,
+LPAREN,
+RPAREN,
+TRUE,
+FALSE;
+
+terminal String VAR;
+terminal Integer NUM;
+non terminal Expression expr;
+
+precedence left PLUS, MINUS;
+precedence left TIMES;
+precedence left UMINUS;
+
+expr ::=
+    expr:e1 PLUS expr:e2    {: RESULT = new Expression2(SymbolConst.PLUS, e1, e2); :} |
+    expr:e1 MINUS expr:e2   {: RESULT = new Expression2(SymbolConst.MINUS, e1, e2); :} |
+    expr:e1 TIMES expr:e2   {: RESULT = new Expression2(SymbolConst.TIMES, e1, e2); :} |
+    MINUS expr:e            {: RESULT = new Number(0 - Integer.parseInt(e.toString())); :} %prec UMINUS |
+    LPAREN expr:e RPAREN    {: RESULT = new Expression0(e); :} |
+    NUM:n                   {: RESULT = new Number(n); :} |
+    VAR:v                   {: RESULT = new Var(v); :}
+;
