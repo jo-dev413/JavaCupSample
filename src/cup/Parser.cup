@@ -21,24 +21,35 @@ MINUS,
 TIMES,
 UMINUS,
 LPAREN,
-RPAREN,
-TRUE,
-FALSE;
+RPAREN;
 
 terminal String VAR;
 terminal Integer NUM;
+terminal Boolean BOOLCONST;
 non terminal Expression expr;
 
+precedence left AND, OR, NOT, IMP;
+precedence left GREATER_THAN, GREATER_THAN_EQ, LESS_THAN, LESS_THAN_EQ, EQ;
 precedence left PLUS, MINUS;
 precedence left TIMES;
 precedence left UMINUS;
 
 expr ::=
-    expr:e1 PLUS expr:e2    {: RESULT = new Expression2(SymbolConst.PLUS, e1, e2); :} |
-    expr:e1 MINUS expr:e2   {: RESULT = new Expression2(SymbolConst.MINUS, e1, e2); :} |
-    expr:e1 TIMES expr:e2   {: RESULT = new Expression2(SymbolConst.TIMES, e1, e2); :} |
-    MINUS expr:e            {: RESULT = new Number(0 - Integer.parseInt(e.toString())); :} %prec UMINUS |
-    LPAREN expr:e RPAREN    {: RESULT = new Expression0(e); :} |
-    NUM:n                   {: RESULT = new Number(n); :} |
-    VAR:v                   {: RESULT = new Var(v); :}
+    expr:e1 PLUS expr:e2                {: RESULT = new Expression2(SymbolConst.PLUS, e1, e2); :} |
+    expr:e1 MINUS expr:e2               {: RESULT = new Expression2(SymbolConst.MINUS, e1, e2); :} |
+    expr:e1 TIMES expr:e2               {: RESULT = new Expression2(SymbolConst.TIMES, e1, e2); :} |
+    expr:e1 AND expr:e2                 {: RESULT = new Expression2(SymbolConst.AND, e1, e2); :} |
+    expr:e1 OR expr:e2                  {: RESULT = new Expression2(SymbolConst.OR, e1, e2); :} |
+    expr:e1 IMP expr:e2                 {: RESULT = new Expression2(SymbolConst.IMP, e1, e2); :} |
+    NOT expr:e                          {: RESULT = new Expression1(SymbolConst.NOT, e); :} |
+    expr:e1 GREATER_THAN expr:e2        {: RESULT = new Expression2(SymbolConst.GREATER_THAN, e1, e2); :} |
+    expr:e1 GREATER_THAN_EQ expr:e2     {: RESULT = new Expression2(SymbolConst.GREATER_THAN_EQ, e1, e2); :} |
+    expr:e1 LESS_THAN expr:e2           {: RESULT = new Expression2(SymbolConst.LESS_THAN, e1, e2); :} |
+    expr:e1 LESS_THAN_EQ expr:e2        {: RESULT = new Expression2(SymbolConst.LESS_THAN_EQ, e1, e2); :} |
+    expr:e1 EQ expr:e2                  {: RESULT = new Expression2(SymbolConst.EQ, e1, e2); :} |
+    MINUS expr:e                        {: RESULT = new Number(0 - Integer.parseInt(e.toString())); :} %prec UMINUS |
+    LPAREN expr:e RPAREN                {: RESULT = new Expression0(e); :} |
+    NUM:n                               {: RESULT = new Number(n); :} |
+    BOOLCONST:b                         {: RESULT = new BoolSym(b); :} |
+    VAR:v                               {: RESULT = new Var(v); :}
 ;

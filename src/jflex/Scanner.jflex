@@ -25,13 +25,12 @@ import java.io.StringReader;
 
 Num = 0 | [1-9][0-9]*
 Var = [a-zA-Z$_][a-zA-Z0-9$_]*
+BoolLiteral = true | false
 
 %%
-"&"         { return sf.newSymbol("&"   , ParserSym.AND);               }
-"|"         { return sf.newSymbol("|"   , ParserSym.OR);                }
-"~"         { return sf.newSymbol("~"   , ParserSym.NOT);               }
-"T"         { return sf.newSymbol("T"   , ParserSym.TRUE);              }
-"F"         { return sf.newSymbol("F"   , ParserSym.FALSE);             }
+"&&"        { return sf.newSymbol("&&"   , ParserSym.AND);               }
+"||"        { return sf.newSymbol("||"   , ParserSym.OR);                }
+"!"         { return sf.newSymbol("!"   , ParserSym.NOT);               }
 "->"        { return sf.newSymbol("->"   , ParserSym.IMP);              }
 
 ">"         { return sf.newSymbol(">"   , ParserSym.GREATER_THAN);      }
@@ -46,7 +45,8 @@ Var = [a-zA-Z$_][a-zA-Z0-9$_]*
 "("         { return sf.newSymbol("("   , ParserSym.LPAREN);            }
 ")"         { return sf.newSymbol(")"   , ParserSym.RPAREN);            }
 
-{Var}       { return sf.newSymbol("VAR" , ParserSym.VAR, yytext());               }
-{Num}       { return sf.newSymbol("NUM" , ParserSym.NUM, new Integer(Integer.parseInt(yytext())));               }
+{BoolLiteral}   { return sf.newSymbol("BOOLCONST",ParserSym.BOOLCONST, new Boolean(Boolean.parseBoolean(yytext()))); }
+{Var}           { return sf.newSymbol("VAR" , ParserSym.VAR, yytext());               }
+{Num}           { return sf.newSymbol("NUM" , ParserSym.NUM, new Integer(Integer.parseInt(yytext())));               }
 
 .           { /* ignore */ }
