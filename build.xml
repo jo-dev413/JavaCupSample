@@ -1,7 +1,7 @@
 <project name="Compiler" default="compile" basedir=".">
     <property name="cup" location="src/cup"/>
     <property name="jflex" location="src/jflex"/>
-    <property name="java" location="src/java"/>
+    <property name="java" location="src"/>
     <property name="classes" location="bin"/>
     <property name="lib" location="tools"/>
     <property name="tools" location="tools"/>
@@ -14,7 +14,6 @@
         <cup srcfile="${cup}/Parser.cup" destdir="${java}"
              parser="Parser" interface="true" locations="false"/>
     </target>
-
 
     <path id="libraries">
         <files includes="${lib}/java-cup-11b-runtime.jar"/>
